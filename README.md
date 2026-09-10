@@ -5,7 +5,7 @@ Prism highlighting + snippets + **almasix-lsp** client.
 ## Install
 
 1. Install **Almasix** from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=almasix.almasix),
-   or download a `.vsix` from [GitHub Releases](https://github.com/almasix-dev/editors/releases)
+   or download a `.vsix` from [GitHub Releases](https://github.com/almasix-dev/ide-support/releases)
    and use **Install from VSIX…**.
 2. Open an Almasix app (directory with `bootstrap/app.py`). Ensure the project
    venv has the language server:
