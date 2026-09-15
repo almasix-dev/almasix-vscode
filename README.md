@@ -24,9 +24,13 @@ See [PARITY.md](PARITY.md) for parity notes and shared limitations.
 
 ## Install
 
-1. Install **Almasix** from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=almasix.almasix),
-   or a `.vsix` from [GitHub Releases](https://github.com/almasix-dev/almasix-vscode/releases)
-   (**Install from VSIX…**).
+| Client | Where to install |
+|--------|------------------|
+| **VS Code** | [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=almasix.almasix) |
+| **Cursor / VSCodium / Windsurf** | [Open VSX](https://open-vsx.org/extension/almasix/almasix) (Extensions search), or the same Marketplace ID if your client mirrors it |
+| Any | `.vsix` from [GitHub Releases](https://github.com/almasix-dev/almasix-vscode/releases) → **Install from VSIX…** |
+
+1. Install the extension (table above).
 2. Open an Almasix app (`bootstrap/app.py`). Ensure:
 
    ```bash
@@ -58,9 +62,26 @@ npm run package   # → almasix-0.x.x.vsix
 ## Release
 
 Create a GitHub Release on a `vX.Y.Z` tag. The [publish workflow](.github/workflows/publish.yml)
-builds the VSIX, attaches it to the Release, and publishes to the Marketplace.
+builds the VSIX, attaches it to the Release, and publishes to **both** the
+Visual Studio Marketplace and [Open VSX](https://open-vsx.org/extension/almasix/almasix)
+(so Cursor / VSCodium can find it in Extensions search).
 
-Secret: `VSCE_PAT` (Azure DevOps PAT with Marketplace Publish for publisher `almasix`).
+Secrets (Actions):
+
+| Secret | Purpose |
+|--------|---------|
+| `VSCE_PAT` | Azure DevOps PAT with Marketplace Publish for publisher `almasix` |
+| `OVSX_PAT` | Open VSX token from [user-settings/tokens](https://open-vsx.org/user-settings/tokens) |
+
+One-time Open VSX setup (before the first publish):
+
+1. Sign in at [open-vsx.org](https://open-vsx.org) (Eclipse account).
+2. Create a token; store it as the `OVSX_PAT` repo secret.
+3. Create the publisher namespace once:
+
+   ```bash
+   npx ovsx create-namespace almasix -p "$OVSX_PAT"
+   ```
 
 ## Docs
 

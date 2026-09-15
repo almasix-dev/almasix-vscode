@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.1
+
+- Marketplace / activity-bar icon: color 128×128 PNG derived from official `almasix.svg`
+  (replaces the broken grayscale placeholder shipped in 0.4.0).
+- Publish workflow also ships to **Open VSX** (`OVSX_PAT`) so Cursor / VSCodium /
+  Windsurf can install from Extensions search.
+- README documents VS Marketplace vs Open VSX install paths.
+
 ## 0.4.0
 
 First release from [`almasix-dev/almasix-vscode`](https://github.com/almasix-dev/almasix-vscode)

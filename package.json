@@ -2,7 +2,7 @@
   "name": "almasix",
   "displayName": "Almasix",
   "description": "Native Almasix Idea parity via smith ide:index — Prism, completions, navigation, rename, and Smith helpers for VS Code / Cursor / VSCodium",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "publisher": "almasix",
   "license": "MIT",
   "icon": "media/almasix.png",
