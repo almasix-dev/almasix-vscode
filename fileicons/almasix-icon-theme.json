@@ -1,0 +1,19 @@
+{
+  "fonts": [],
+  "iconDefinitions": {
+    "_file": {
+      "iconPath": "./file.svg"
+    },
+    "_prism_file": {
+      "iconPath": "../media/prism.svg"
+    }
+  },
+  "file": "_file",
+  "fileExtensions": {
+    "prism.html": "_prism_file"
+  },
+  "languageIds": {
+    "prism-html": "_prism_file"
+  },
+  "showLanguageModeIcons": true
+}

@@ -10,6 +10,7 @@ not LSP by default.
 ## Features
 
 - Prism (`.prism.html`) highlighting + snippets + dotenv language
+- Prism **file icon** (language icon + optional **Almasix File Icons** theme)
 - Completions for routes, views, config, env, components, gates, columns, …
 - Go to Definition / Find References / Rename for indexed call-site symbols
 - Hover docs + unknown-symbol / Prism structure diagnostics
@@ -39,6 +40,27 @@ See [PARITY.md](PARITY.md) for parity notes and shared limitations.
 
 3. Optional: `smith ide:install` to write `.vscode/settings.json` /
    `extensions.json`.
+
+### Prism file icons
+
+The extension contributes the official Prism mark (`media/prism.svg`) as the
+`prism-html` **language icon**.
+
+Explorer icons still come from your **File Icon Theme**. Themes like Seti /
+Material Icon Theme usually match the trailing `.html` and show an HTML icon
+for `*.prism.html`. To use the Prism mark in the explorer:
+
+- **Command Palette → Preferences: File Icon Theme → Almasix File Icons**, or
+- Keep your theme and associate the compound extension (Material Icon Theme):
+
+  ```json
+  "material-icon-theme.files.associations": {
+    "*.prism.html": "blade"
+  }
+  ```
+
+  (or another MIT icon name you prefer until Material Icon Theme ships a
+  first-party `prism.html` mapping)
 
 ## Settings
 
