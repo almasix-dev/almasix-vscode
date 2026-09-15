@@ -2,6 +2,11 @@ name: Publish
 
 # Cutting a release: publish a GitHub Release on a vX.Y.Z tag.
 # Rehearsing: Actions → Publish → Run workflow → dry_run: true.
+#
+# Secrets (repo Settings → Secrets and variables → Actions):
+#   VSCE_PAT — Azure DevOps PAT (Marketplace Publish) for publisher `almasix`
+#   OVSX_PAT — Open VSX token (https://open-vsx.org/user-settings/tokens)
+#             Namespace `almasix` must exist once: npx ovsx create-namespace almasix -p "$OVSX_PAT"
 
 on:
   release:
@@ -9,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: Build artifact only (skip Marketplace)
+        description: Build artifact only (skip VS Marketplace + Open VSX)
         type: boolean
         default: true
       version:
@@ -88,3 +93,16 @@ jobs:
           fi
           VSIX=$(ls -1 *.vsix | head -n1)
           npx --yes @vscode/vsce publish --packagePath "$VSIX" --pat "$VSCE_PAT"
+
+      - name: Publish to Open VSX
+        if: github.event_name == 'release' || inputs.dry_run == false
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          if [ -z "$OVSX_PAT" ]; then
+            echo "OVSX_PAT secret is not set" >&2
+            exit 1
+          fi
+          VSIX=$(ls -1 *.vsix | head -n1)
+          # Cursor / VSCodium / Windsurf search Open VSX, not the VS Marketplace.
+          npx --yes ovsx publish "$VSIX" --pat "$OVSX_PAT"
