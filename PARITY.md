@@ -29,6 +29,7 @@ provider surfaces:
 | Status / index health | status bar `Almasix · N routes · M views` | full parity |
 | Smith run configs | TaskProvider `almasix` | full parity |
 | Prism file type + highlighting | TextMate + language contrib | full parity\* |
+| Prism file icon | language icon + optional Almasix File Icons theme | full parity† |
 | Dotenv language + env completion | dotenv lang + completions | full parity |
 | Two-way env / bulk `MAIL_*` insert | `EnvBulkInsert` in completions | full parity |
 | Articulate / ORM column completion | `CompletionCatalog` + `ModelResolver` | full parity |
@@ -36,6 +37,10 @@ provider surfaces:
 
 \*Highlighting uses TextMate grammars here vs JetBrains’ native Prism lexer (same
 language surface; different engine).
+
+†Explorer icons follow the active File Icon Theme; Seti/Material often map
+`*.prism.html` as HTML. Use **Almasix File Icons** or a theme association (see
+README). JetBrains always shows `/icons/prism.svg` on the Prism file type.
 
 ## Shared limitations (both IDEs)
 

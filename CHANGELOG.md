@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.2
+
+- Prism structure: treat inline `@section('name', 'value')` as self-closing;
+  accept `@show` as a `@section` closer (matches the Prism compiler).
+- Prism **file icons**: language icon + optional **Almasix File Icons** theme
+  (`*.prism.html` → official Prism mark).
+
 ## 0.4.1
 
 - Marketplace / activity-bar icon: color 128×128 PNG derived from official `almasix.svg`

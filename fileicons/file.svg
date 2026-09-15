@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-hidden="true">
+  <!-- Neutral document glyph for non-Prism files when the Almasix icon theme is active. -->
+  <path fill="#90A4AE" d="M8 2h12l6 6v20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+  <path fill="#CFD8DC" d="M20 2v6h6"/>
+</svg>

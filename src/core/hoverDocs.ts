@@ -27,7 +27,8 @@ export const HoverDocs = {
     include: "`@include('partial')` — render another view inline.",
     component: "`@component('name')` — component; `@endcomponent`.",
     endcomponent: "`@endcomponent` — closes a `@component` block.",
-    section: "`@section('name')` — layout section; `@endsection` / `@show`.",
+    section:
+      "`@section('name')` … `@endsection` / `@show`, or inline `@section('name', 'value')`.",
     endsection: "`@endsection` — closes a `@section` block.",
     yield: "`@yield('name')` — render a section from a child view.",
     csrf: "`@csrf` — hidden CSRF token field.",
