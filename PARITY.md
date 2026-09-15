@@ -50,4 +50,4 @@ language surface; different engine).
 |---------|--------|
 | Optional legacy LSP | `almasix.useLsp` (default **false**) |
 
-See also [jetbrains/README.md](../jetbrains/README.md).
+See also [jetbrains/README.md](https://github.com/almasix-dev/almasix-idea).

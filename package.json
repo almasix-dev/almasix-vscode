@@ -233,12 +233,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/almasix-dev/ide-support.git"
+    "url": "https://github.com/almasix-dev/almasix-vscode.git"
   },
   "bugs": {
-    "url": "https://github.com/almasix-dev/ide-support/issues"
+    "url": "https://github.com/almasix-dev/almasix-vscode/issues"
   },
-  "homepage": "https://github.com/almasix-dev/ide-support#readme",
+  "homepage": "https://github.com/almasix-dev/almasix-vscode#readme",
   "dependencies": {
     "vscode-languageclient": "^9.0.1"
   },

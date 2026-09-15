@@ -1,0 +1,90 @@
+name: Publish
+
+# Cutting a release: publish a GitHub Release on a vX.Y.Z tag.
+# Rehearsing: Actions → Publish → Run workflow → dry_run: true.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build artifact only (skip Marketplace)
+        type: boolean
+        default: true
+      version:
+        description: Version without v prefix (workflow_dispatch only; release uses tag)
+        type: string
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Build + publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            RAW="${{ github.event.release.tag_name }}"
+          else
+            RAW="${{ inputs.version }}"
+            if [ -z "$RAW" ]; then
+              RAW=$(node -p "require('./package.json').version")
+            fi
+          fi
+          VERSION="${RAW#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $VERSION"
+
+      - name: Align package version
+        run: |
+          VERSION="${{ steps.ver.outputs.version }}"
+          node -e "
+            const fs = require('fs');
+            const p = 'package.json';
+            const j = JSON.parse(fs.readFileSync(p, 'utf8'));
+            j.version = process.env.VERSION;
+            fs.writeFileSync(p, JSON.stringify(j, null, 2) + '\n');
+          "
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run package
+
+      - name: Upload release assets
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          gh release upload "$TAG" *.vsix --clobber
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: almasix-vscode-${{ steps.ver.outputs.version }}
+          path: "*.vsix"
+
+      - name: Publish to VS Marketplace
+        if: github.event_name == 'release' || inputs.dry_run == false
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "VSCE_PAT secret is not set" >&2
+            exit 1
+          fi
+          VSIX=$(ls -1 *.vsix | head -n1)
+          npx --yes @vscode/vsce publish --packagePath "$VSIX" --pat "$VSCE_PAT"
