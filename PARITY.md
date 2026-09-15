@@ -1,6 +1,9 @@
-# VS Code ↔ JetBrains parity (0.4.0)
+# VS Code ↔ JetBrains parity (0.4.2)
 
-Checklist mapping **Almasix Idea** features to this extension.
+Checklist mapping **[Almasix Idea](https://github.com/almasix-dev/almasix-idea)**
+features to this extension. For install and architecture, see the
+[README](README.md) and framework
+[Editor setup](https://almasix-dev.github.io/almasix/editor-setup/).
 
 ## Full parity (core intelligence + providers)
 
@@ -55,4 +58,4 @@ README). JetBrains always shows `/icons/prism.svg` on the Prism file type.
 |---------|--------|
 | Optional legacy LSP | `almasix.useLsp` (default **false**) |
 
-See also [jetbrains/README.md](https://github.com/almasix-dev/almasix-idea).
+See also the [Almasix Idea README](https://github.com/almasix-dev/almasix-idea#readme).
