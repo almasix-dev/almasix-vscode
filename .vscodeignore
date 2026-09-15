@@ -5,6 +5,11 @@ scripts/**
 node_modules/**
 .gitignore
 tsconfig.json
+esbuild.js
+vitest.config.ts
 **/*.ts
 **/*.map
 **/.DS_Store
+**/*.vsix
+CHANGELOG.md
+PARITY.md

@@ -1,10 +1,11 @@
 {
   "name": "almasix",
   "displayName": "Almasix",
-  "description": "Prism templates, Almasix LSP, and Smith helpers for VS Code / Cursor / VSCodium",
-  "version": "0.1.0",
+  "description": "Native Almasix Idea parity via smith ide:index — Prism, completions, navigation, rename, and Smith helpers for VS Code / Cursor / VSCodium",
+  "version": "0.4.0",
   "publisher": "almasix",
   "license": "MIT",
+  "icon": "media/almasix.png",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -12,20 +13,24 @@
     "Programming Languages",
     "Linters",
     "Snippets",
-    "Formatters"
+    "Other"
   ],
   "keywords": [
     "almasix",
     "prism",
     "laravel",
     "python",
-    "lsp"
+    "smith"
   ],
   "activationEvents": [
     "onLanguage:python",
     "onLanguage:prism-html",
     "onLanguage:dotenv",
-    "workspaceContains:bootstrap/app.py"
+    "workspaceContains:bootstrap/app.py",
+    "onView:almasixSymbols",
+    "onCommand:almasix.rebuildIndex",
+    "onCommand:almasix.newGenerator",
+    "onCommand:almasix.newModel"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -79,18 +84,45 @@
         "path": "./snippets/prism.code-snippets"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "almasix",
+          "title": "Almasix",
+          "icon": "media/almasix.svg"
+        }
+      ]
+    },
+    "views": {
+      "almasix": [
+        {
+          "id": "almasixSymbols",
+          "name": "Symbols"
+        }
+      ]
+    },
     "configuration": {
       "title": "Almasix",
       "properties": {
         "almasix.pythonPath": {
           "type": "string",
           "default": "",
-          "description": "Python interpreter that has almasix[lsp] installed (e.g. ${workspaceFolder}/.venv/bin/python). Empty = try PATH, then .venv."
+          "description": "Python interpreter for smith / optional LSP (e.g. ${workspaceFolder}/.venv/bin/python). Empty = try .venv then PATH."
+        },
+        "almasix.smithPath": {
+          "type": "string",
+          "default": "",
+          "description": "Override path to the smith executable. Empty = .venv/bin/smith, ./smith, or PATH."
+        },
+        "almasix.useLsp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Start the legacy almasix-lsp client in addition to the native index (default false)."
         },
         "almasix.lsp.command": {
           "type": "string",
           "default": "",
-          "description": "Override LSP launch command. Empty = almasix-lsp or python -m almasix.lsp."
+          "description": "Override LSP launch command when almasix.useLsp is true."
         },
         "almasix.lsp.args": {
           "type": "array",
@@ -105,17 +137,72 @@
     "commands": [
       {
         "command": "almasix.rebuildIndex",
-        "title": "Almasix: Rebuild LSP Index"
+        "title": "Almasix: Rebuild Index",
+        "icon": "$(refresh)"
       },
       {
         "command": "almasix.showAppInfo",
         "title": "Almasix: Show Application Info"
       },
       {
+        "command": "almasix.restart",
+        "title": "Almasix: Restart"
+      },
+      {
         "command": "almasix.restartServer",
         "title": "Almasix: Restart Language Server"
+      },
+      {
+        "command": "almasix.newGenerator",
+        "title": "Almasix: New…",
+        "icon": "$(add)"
+      },
+      {
+        "command": "almasix.newModel",
+        "title": "Almasix: New Model…"
+      },
+      {
+        "command": "almasix.filterSymbols",
+        "title": "Almasix: Filter Symbols",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "almasix.openSymbol",
+        "title": "Almasix: Open Symbol"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "almasix.rebuildIndex",
+          "when": "view == almasixSymbols",
+          "group": "navigation"
+        },
+        {
+          "command": "almasix.filterSymbols",
+          "when": "view == almasixSymbols",
+          "group": "navigation"
+        },
+        {
+          "command": "almasix.newGenerator",
+          "when": "view == almasixSymbols",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "almasix.newGenerator",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation@9"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "almasix.openSymbol",
+          "when": "false"
+        }
+      ]
+    },
     "taskDefinitions": [
       {
         "type": "almasix",
@@ -133,11 +220,14 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "check": "tsc -p ./ --noEmit",
+    "compile": "npm run check && node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "sync-prism": "node ./scripts/sync-prism.js",
     "prepackage": "npm run sync-prism && npm run compile",
-    "package": "npx --yes @vscode/vsce package --no-dependencies",
+    "package": "npx --yes @vscode/vsce package",
     "vsce": "npm run package",
     "publish": "npx --yes @vscode/vsce publish"
   },
@@ -155,6 +245,12 @@
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/vscode": "^1.85.0",
-    "typescript": "^5.3.3"
+    "esbuild": "^0.25.0",
+    "typescript": "^5.3.3",
+    "vitest": "^3.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true
   }
 }
