@@ -2,6 +2,9 @@
 
 ## 0.4.0
 
+First release from [`almasix-dev/almasix-vscode`](https://github.com/almasix-dev/almasix-vscode)
+(split from the former `ide-support` monorepo).
+
 Native **Almasix Idea** parity for VS Code / Cursor / VSCodium via
 `smith ide:index --json` (same brain as the JetBrains plugin):
 
